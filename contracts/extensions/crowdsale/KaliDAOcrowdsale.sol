@@ -3,14 +3,14 @@
 pragma solidity >=0.8.4;
 
 import '../../libraries/SafeTransferLib.sol';
-import '../../interfaces/IKaliAccessManager.sol';
-import '../../interfaces/IKaliShareManager.sol';
+import '../../interfaces/IHashAccessManager.sol';
+import '../../interfaces/IHashShareManager.sol';
 import '../../interfaces/IERC20Permit.sol';
 import '../../utils/Multicall.sol';
 import '../../utils/ReentrancyGuard.sol';
 
 /// @notice Crowdsale contract that receives ETH or ERC-20 to mint registered DAO tokens, including merkle access lists.
-contract KaliDAOcrowdsale is Multicall, ReentrancyGuard {
+contract HashDAOcrowdsale is Multicall, ReentrancyGuard {
     using SafeTransferLib for address;
 
     event ExtensionSet(
@@ -33,7 +33,7 @@ contract KaliDAOcrowdsale is Multicall, ReentrancyGuard {
 
     error PurchaseLimit();
     
-    IKaliAccessManager private immutable accessManager;
+    IHashAccessManager private immutable accessManager;
 
     address private immutable wETH;
 
@@ -49,7 +49,7 @@ contract KaliDAOcrowdsale is Multicall, ReentrancyGuard {
         string details;
     }
 
-    constructor(IKaliAccessManager accessManager_, address wETH_) {
+    constructor(IHashAccessManager accessManager_, address wETH_) {
         accessManager = accessManager_;
 
         wETH = wETH_;
@@ -119,7 +119,7 @@ contract KaliDAOcrowdsale is Multicall, ReentrancyGuard {
 
             sale.amountPurchased += uint96(amountOut);
 
-            IKaliShareManager(dao).mintShares(msg.sender, amountOut);
+            IHashShareManager(dao).mintShares(msg.sender, amountOut);
         } else if (sale.purchaseToken == address(0xDead)) {
             amountOut = msg.value * sale.purchaseMultiplier;
 
@@ -133,7 +133,7 @@ contract KaliDAOcrowdsale is Multicall, ReentrancyGuard {
 
             sale.amountPurchased += uint96(amountOut);
 
-            IKaliShareManager(dao).mintShares(msg.sender, amountOut);
+            IHashShareManager(dao).mintShares(msg.sender, amountOut);
         } else {
             // send tokens to DAO
             sale.purchaseToken._safeTransferFrom(msg.sender, dao, amount);
@@ -144,7 +144,7 @@ contract KaliDAOcrowdsale is Multicall, ReentrancyGuard {
 
             sale.amountPurchased += uint96(amountOut);
             
-            IKaliShareManager(dao).mintShares(msg.sender, amountOut);
+            IHashShareManager(dao).mintShares(msg.sender, amountOut);
         }
 
         emit ExtensionCalled(dao, msg.sender, amountOut);

@@ -2,8 +2,8 @@
 
 pragma solidity >=0.8.4;
 
-/// @notice Kali DAO tribute escrow interface.
-interface IKaliDAOtribute {
+/// @notice Hash DAO tribute escrow interface.
+interface IHashDAOtribute {
     enum ProposalType {
         MINT, 
         BURN, 

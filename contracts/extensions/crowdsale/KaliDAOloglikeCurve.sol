@@ -4,12 +4,12 @@ pragma solidity >=0.8.4;
 
 import '../../libraries/SafeTransferLib.sol';
 import '../../interfaces/IERC20minimal.sol';
-import '../../interfaces/IKaliAccessManager.sol';
+import '../../interfaces/IHashAccessManager.sol';
 import '../../utils/ReentrancyGuard.sol';
 
 /// @notice Crowdsale contract that receives ETH or tokens to mint registered DAO tokens, including merkle access lists.
 /// @dev This is meant to simulate a logarithmic curve with significantly less computation.
-contract KaliDAOloglikeCurve is ReentrancyGuard {
+contract HashDAOloglikeCurve is ReentrancyGuard {
     using SafeTransferLib for address;
 
     event ExtensionSet(
@@ -34,7 +34,7 @@ contract KaliDAOloglikeCurve is ReentrancyGuard {
 
     error InvalidVelocity();
     
-    IKaliAccessManager public immutable accessManager;
+    IHashAccessManager public immutable accessManager;
 
     mapping(address => Crowdsale) public crowdsales;
 
@@ -49,7 +49,7 @@ contract KaliDAOloglikeCurve is ReentrancyGuard {
         uint32 saleEnds;
     }
 
-    constructor(IKaliAccessManager accessManager_) {
+    constructor(IHashAccessManager accessManager_) {
         accessManager = accessManager_;
     }
 

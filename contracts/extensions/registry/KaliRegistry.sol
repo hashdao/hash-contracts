@@ -3,7 +3,7 @@
 pragma solidity >=0.8.4;
 
 /// @notice Extension that brings information about a DAO's legal entity on chain.
-contract KaliRegistry {
+contract HashRegistry {
 
     event ExtensionSet(
         address indexed dao, 

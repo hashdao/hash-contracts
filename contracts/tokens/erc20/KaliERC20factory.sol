@@ -2,13 +2,13 @@
 
 pragma solidity >=0.8.4;
 
-import './KaliERC20.sol';
+import './HashERC20.sol';
 import '../../utils/Multicall.sol';
 
-/// @notice Factory to deploy Kali ERC20.
-contract KaliERC20factory is Multicall {
+/// @notice Factory to deploy Hash ERC20.
+contract HashERC20factory is Multicall {
     event ERC20deployed(
-        KaliERC20 indexed kaliERC20, 
+        HashERC20 indexed HashERC20, 
         string name, 
         string symbol, 
         string details, 
@@ -26,7 +26,7 @@ contract KaliERC20factory is Multicall {
         erc20Master = erc20Master_;
     }
     
-    function deployKaliERC20(
+    function deployHashERC20(
         string calldata name_,
         string memory symbol_,
         string calldata details_,
@@ -34,10 +34,10 @@ contract KaliERC20factory is Multicall {
         uint256[] calldata amounts_,
         bool paused_,
         address owner_
-    ) public virtual returns (KaliERC20 kaliERC20) {
-        kaliERC20 = KaliERC20(_cloneAsMinimalProxy(erc20Master, name_));
+    ) public virtual returns (HashERC20 HashERC20) {
+        HashERC20 = HashERC20(_cloneAsMinimalProxy(erc20Master, name_));
         
-        kaliERC20.init(
+        HashERC20.init(
             name_,
             symbol_,
             details_,
@@ -47,7 +47,7 @@ contract KaliERC20factory is Multicall {
             owner_
         );
 
-        emit ERC20deployed(kaliERC20, name_, symbol_, details_, accounts_, amounts_, paused_, owner_);
+        emit ERC20deployed(HashERC20, name_, symbol_, details_, accounts_, amounts_, paused_, owner_);
     }
 
     /// @dev modified from Aelin (https://github.com/AelinXYZ/aelin/blob/main/contracts/MinimalProxyFactory.sol)

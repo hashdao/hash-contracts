@@ -2,13 +2,13 @@
 
 pragma solidity >=0.8.4;
 
-import './KaliDAO.sol';
+import './HashDAO.sol';
 import './interfaces/IRicardianLLC.sol';
 
-/// @notice Factory to deploy Kali DAO.
-contract KaliDAOfactory is Multicall {
+/// @notice Factory to deploy Hash DAO.
+contract HashDAOfactory is Multicall {
     event DAOdeployed(
-        KaliDAO indexed kaliDAO, 
+        HashDAO indexed hashDAO, 
         string name, 
         string symbol, 
         string docs, 
@@ -22,17 +22,17 @@ contract KaliDAOfactory is Multicall {
 
     error NullDeploy();
 
-    address payable private immutable kaliMaster;
+    address payable private immutable hashMaster;
 
     IRicardianLLC private immutable ricardianLLC;
 
-    constructor(address payable kaliMaster_, IRicardianLLC ricardianLLC_) {
-        kaliMaster = kaliMaster_;
+    constructor(address payable hashMaster_, IRicardianLLC ricardianLLC_) {
+        hashMaster = hashMaster_;
 
         ricardianLLC = ricardianLLC_;
     }
     
-    function deployKaliDAO(
+    function deployHashDAO(
         string memory name_,
         string memory symbol_,
         string memory docs_,
@@ -42,10 +42,10 @@ contract KaliDAOfactory is Multicall {
         address[] calldata voters_,
         uint256[] calldata shares_,
         uint32[16] memory govSettings_
-    ) public payable virtual returns (KaliDAO kaliDAO) {
-        kaliDAO = KaliDAO(_cloneAsMinimalProxy(kaliMaster, name_));
+    ) public payable virtual returns (HashDAO hashDAO) {
+        hashDAO = HashDAO(_cloneAsMinimalProxy(hashMaster, name_));
         
-        kaliDAO.init(
+        hashDAO.init(
             name_, 
             symbol_, 
             docs_,
@@ -60,10 +60,10 @@ contract KaliDAOfactory is Multicall {
         bytes memory docs = bytes(docs_);
 
         if (docs.length == 0) {
-            ricardianLLC.mintLLC{value: msg.value}(address(kaliDAO));
+            ricardianLLC.mintLLC{value: msg.value}(address(hashDAO));
         }
 
-        emit DAOdeployed(kaliDAO, name_, symbol_, docs_, paused_, extensions_, extensionsData_, voters_, shares_, govSettings_);
+        emit DAOdeployed(hashDAO, name_, symbol_, docs_, paused_, extensions_, extensionsData_, voters_, shares_, govSettings_);
     }
 
     /// @dev modified from Aelin (https://github.com/AelinXYZ/aelin/blob/main/contracts/MinimalProxyFactory.sol)

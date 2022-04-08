@@ -16,8 +16,8 @@ async function advanceTime(time) {
 }
 
 describe("Crowdsale", function () {
-    let Kali // KaliDAO contract
-    let kali // KaliDAO contract instance
+    let Hash // HashDAO contract
+    let Hash // HashDAO contract instance
     let PurchaseToken // PurchaseToken contract
     let purchaseToken // PurchaseToken contract instance
     let Whitelist // Whitelist contract
@@ -31,16 +31,16 @@ describe("Crowdsale", function () {
     beforeEach(async () => {
       ;[proposer, alice, bob] = await ethers.getSigners()
   
-      Kali = await ethers.getContractFactory("KaliDAO")
-      kali = await Kali.deploy()
-      await kali.deployed()
+      Hash = await ethers.getContractFactory("HashDAO")
+      Hash = await Hash.deploy()
+      await Hash.deployed()
 
-      PurchaseToken = await ethers.getContractFactory("KaliERC20")
+      PurchaseToken = await ethers.getContractFactory("HashERC20")
       purchaseToken = await PurchaseToken.deploy()
       await purchaseToken.deployed()
       await purchaseToken.init(
-        "KALI",
-        "KALI",
+        "Hash",
+        "Hash",
         "DOCS",
         [proposer.address],
         [getBigNumber(1000)],
@@ -48,20 +48,20 @@ describe("Crowdsale", function () {
         proposer.address
       )
 
-      Whitelist = await ethers.getContractFactory("KaliAccessManager")
+      Whitelist = await ethers.getContractFactory("HashAccessManager")
       whitelist = await Whitelist.deploy()
       await whitelist.deployed()
       
-      Crowdsale = await ethers.getContractFactory("KaliDAOcrowdsale")
+      Crowdsale = await ethers.getContractFactory("HashDAOcrowdsale")
       crowdsale = await Crowdsale.deploy(whitelist.address, wethAddress)
       await crowdsale.deployed()
     })
   
     it("Should allow unrestricted ETH crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -84,31 +84,31 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
+        await Hash.processProposal(1)
         await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         await crowdsale 
             .connect(alice)
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
-        expect(await ethers.provider.getBalance(kali.address)).to.equal(
+        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
-        expect(await kali.balanceOf(alice.address)).to.equal(getBigNumber(100))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
     })
 
     it("Should allow restricted ETH crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -137,31 +137,31 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
+        await Hash.processProposal(1)
         await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         await crowdsale 
             .connect(alice)
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
-        expect(await ethers.provider.getBalance(kali.address)).to.equal(
+        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
-        expect(await kali.balanceOf(alice.address)).to.equal(getBigNumber(100))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
     })
 
     it("Should forbid non-whitelisted participation in ETH crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -190,31 +190,31 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
+        await Hash.processProposal(1)
         await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         expect(await crowdsale 
             .connect(alice)
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         }).should.be.reverted)
-        expect(await ethers.provider.getBalance(kali.address)).to.equal(
+        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
-        expect(await kali.balanceOf(alice.address)).to.equal(getBigNumber(0))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(0))
     })
 
     it("Should enforce purchase limit in ETH crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -243,33 +243,33 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
+        await Hash.processProposal(1)
         await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         expect(await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         }).should.be.reverted)
-        expect(await ethers.provider.getBalance(kali.address)).to.equal(
+        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(210))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(210))
     })
 
     it("Should allow unrestricted ERC20 crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -294,25 +294,25 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
-        await crowdsale.callExtension(kali.address, getBigNumber(50))
+        await Hash.processProposal(1)
+        await crowdsale.callExtension(Hash.address, getBigNumber(50))
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(950)
         )
-        expect(await purchaseToken.balanceOf(kali.address)).to.equal(
+        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
     })
 
     it("Should allow restricted ERC20 crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -343,25 +343,25 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
-        await crowdsale.callExtension(kali.address, getBigNumber(50))
+        await Hash.processProposal(1)
+        await crowdsale.callExtension(Hash.address, getBigNumber(50))
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(950)
         )
-        expect(await purchaseToken.balanceOf(kali.address)).to.equal(
+        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
     })
 
     it("Should forbid non-whitelisted participation in ERC20 crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -392,25 +392,25 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
-        expect(await crowdsale.callExtension(kali.address, getBigNumber(50)).should.be.reverted)
+        await Hash.processProposal(1)
+        expect(await crowdsale.callExtension(Hash.address, getBigNumber(50)).should.be.reverted)
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(1000)
         )
-        expect(await purchaseToken.balanceOf(kali.address)).to.equal(
+        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(10))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(10))
     })
 
     it("Should enforce purchase limit in ERC20 crowdsale", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -441,27 +441,27 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
-        await crowdsale.callExtension(kali.address, getBigNumber(50))
-        await crowdsale.callExtension(kali.address, getBigNumber(50))
-        expect(await crowdsale.callExtension(kali.address, getBigNumber(50)).should.be.reverted)
+        await Hash.processProposal(1)
+        await crowdsale.callExtension(Hash.address, getBigNumber(50))
+        await crowdsale.callExtension(Hash.address, getBigNumber(50))
+        expect(await crowdsale.callExtension(Hash.address, getBigNumber(50)).should.be.reverted)
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(900)
         )
-        expect(await purchaseToken.balanceOf(kali.address)).to.equal(
+        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await kali.balanceOf(proposer.address)).to.equal(getBigNumber(210))
+        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(210))
     })
 
     it("Should enforce purchase time limit", async function () {
-        // Instantiate KaliDAO
-        await kali.init(
-          "KALI",
-          "KALI",
+        // Instantiate HashDAO
+        await Hash.init(
+          "Hash",
+          "Hash",
           "DOCS",
           false,
           [],
@@ -484,16 +484,16 @@ describe("Crowdsale", function () {
                 ]
         )
 
-        await kali.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await kali.vote(1, true)
+        await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
+        await Hash.vote(1, true)
         await advanceTime(35)
-        await kali.processProposal(1)
+        await Hash.processProposal(1)
         await advanceTime(1672174799)
         expect(await crowdsale 
-            .callExtension(kali.address, getBigNumber(50), {
+            .callExtension(Hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         }).should.be.reverted)
-        expect(await ethers.provider.getBalance(kali.address)).to.equal(
+        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
             getBigNumber(0)
         )
     })

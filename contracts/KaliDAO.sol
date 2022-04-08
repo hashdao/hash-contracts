@@ -2,14 +2,14 @@
 
 pragma solidity >=0.8.4;
 
-import './KaliDAOtoken.sol';
+import './HashDAOtoken.sol';
 import './utils/Multicall.sol';
 import './utils/NFThelper.sol';
 import './utils/ReentrancyGuard.sol';
-import './interfaces/IKaliDAOextension.sol';
+import './interfaces/IHashDAOextension.sol';
 
-/// @notice Simple gas-optimized Kali DAO core module.
-contract KaliDAO is KaliDAOtoken, Multicall, NFThelper, ReentrancyGuard {
+/// @notice Simple gas-optimized Hash DAO core module.
+contract HashDAO is HashDAOtoken, Multicall, NFThelper, ReentrancyGuard {
     /*///////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/
@@ -166,7 +166,7 @@ contract KaliDAO is KaliDAOtoken, Multicall, NFThelper, ReentrancyGuard {
 
         if (govSettings_[3] <= 51 || govSettings_[3] > 100) revert SupermajorityBounds();
 
-        KaliDAOtoken._init(name_, symbol_, paused_, voters_, shares_);
+        HashDAOtoken._init(name_, symbol_, paused_, voters_, shares_);
 
         if (extensions_.length != 0) {
             // cannot realistically overflow on human timescales
@@ -365,7 +365,7 @@ contract KaliDAO is KaliDAOtoken, Multicall, NFThelper, ReentrancyGuard {
         uint96 weight = getPriorVotes(signer, prop.creationTime);
         
         // this is safe from overflow because `yesVotes` and `noVotes` are capped by `totalSupply`
-        // which is checked for overflow in `KaliDAOtoken` contract
+        // which is checked for overflow in `HashDAOtoken` contract
         unchecked { 
             if (approve) {
                 prop.yesVotes += weight;
@@ -449,7 +449,7 @@ contract KaliDAO is KaliDAOtoken, Multicall, NFThelper, ReentrancyGuard {
                         if (prop.amounts[i] != 0) 
                             extensions[prop.accounts[i]] = !extensions[prop.accounts[i]];
                     
-                        if (prop.payloads[i].length > 3) IKaliDAOextension(prop.accounts[i])
+                        if (prop.payloads[i].length > 3) IHashDAOextension(prop.accounts[i])
                             .setExtension(prop.payloads[i]);
                     }
                 
@@ -483,7 +483,7 @@ contract KaliDAO is KaliDAOtoken, Multicall, NFThelper, ReentrancyGuard {
             uint256 minVotes = (totalSupply * quorum) / 100;
             
             // this is safe from overflow because `yesVotes` and `noVotes` 
-            // supply are checked in `KaliDAOtoken` contract
+            // supply are checked in `HashDAOtoken` contract
             unchecked {
                 uint256 votes = yesVotes + noVotes;
 
@@ -523,7 +523,7 @@ contract KaliDAO is KaliDAOtoken, Multicall, NFThelper, ReentrancyGuard {
     ) public payable nonReentrant virtual returns (bool mint, uint256 amountOut) {
         if (!extensions[extension]) revert NotExtension();
         
-        (mint, amountOut) = IKaliDAOextension(extension).callExtension{value: msg.value}
+        (mint, amountOut) = IHashDAOextension(extension).callExtension{value: msg.value}
             (msg.sender, amount, extensionData);
         
         if (mint) {

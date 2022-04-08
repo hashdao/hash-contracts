@@ -6,8 +6,8 @@ import '../../libraries/SafeTransferLib.sol';
 import '../../interfaces/IERC20minimal.sol';
 import '../../utils/ReentrancyGuard.sol';
 
-/// @notice Redemption contract that transfers registered tokens from Kali DAO in proportion to burnt DAO tokens.
-contract KaliDAOredemption is ReentrancyGuard {
+/// @notice Redemption contract that transfers registered tokens from Hash DAO in proportion to burnt DAO tokens.
+contract HashDAOredemption is ReentrancyGuard {
     using SafeTransferLib for address;
 
     event ExtensionSet(address indexed dao, address[] tokens, uint256 indexed redemptionStart);

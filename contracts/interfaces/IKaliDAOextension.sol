@@ -2,8 +2,8 @@
 
 pragma solidity >=0.8.4;
 
-/// @notice Kali DAO membership extension interface.
-interface IKaliDAOextension {
+/// @notice Hash DAO membership extension interface.
+interface IHashDAOextension {
     function setExtension(bytes calldata extensionData) external;
 
     function callExtension(

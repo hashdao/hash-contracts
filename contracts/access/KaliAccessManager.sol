@@ -5,10 +5,10 @@ pragma solidity >=0.8.4;
 import '../libraries/MerkleProof.sol';
 import '../utils/Multicall.sol';
 
-/// @notice Kali DAO access manager.
+/// @notice hash DAO access manager.
 /// @author Modified from SushiSwap
 /// (https://github.com/sushiswap/trident/blob/master/contracts/pool/franchised/WhiteListManager.sol)
-contract KaliAccessManager is Multicall {
+contract HashAccessManager is Multicall {
     using MerkleProof for bytes32[];
 
     /*///////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ contract KaliAccessManager is Multicall {
             keccak256(
                 abi.encode(
                     keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'),
-                    keccak256(bytes('KaliAccessManager')),
+                    keccak256(bytes('HashAccessManager')),
                     keccak256('1'),
                     block.chainid,
                     address(this)

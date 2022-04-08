@@ -1,1 +1,1 @@
-KaliDAO contract audit reports.
+HashDAO contract audit reports.

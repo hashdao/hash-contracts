@@ -1,21 +1,21 @@
 {
-  "name": "kali-contracts",
+  "name": "hash-contracts",
   "version": "1.0.0",
-  "description": "Smart Contracts for KaliDAO ",
+  "description": "Smart Contracts for HashDAO ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kalidao/kali-contracts.git"
+    "url": "git+https://github.com/hashdao/hash-contracts.git"
   },
   "author": "Robert Campbell",
   "license": "GNU",
   "bugs": {
-    "url": "https://github.com/kalidao/kali-contracts/issues"
+    "url": "https://github.com/hashdao/hash-contracts/issues"
   },
-  "homepage": "https://github.com/kalidao/kali-contracts#readme",
+  "homepage": "https://github.com/hashdao/hash-contracts#readme",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
     "@nomiclabs/hardhat-waffle": "^2.0.1",

@@ -2,8 +2,8 @@
 
 pragma solidity >=0.8.4;
 
-/// @notice Kali DAO access manager interface.
-interface IKaliAccessManager {
+/// @notice Hash DAO access manager interface.
+interface IHashAccessManager {
     function listedAccounts(uint256 listId, address account) external returns (bool);
 
     function joinList(
