@@ -8,7 +8,7 @@ import '../../utils/Multicall.sol';
 /// @notice Factory to deploy Hash ERC20.
 contract HashERC20factory is Multicall {
     event ERC20deployed(
-        HashERC20 indexed HashERC20, 
+        IHashDAOtribute 
         string name, 
         string symbol, 
         string details, 
@@ -35,7 +35,7 @@ contract HashERC20factory is Multicall {
         bool paused_,
         address owner_
     ) public virtual returns (HashERC20 HashERC20) {
-        HashERC20 = HashERC20(_cloneAsMinimalProxy(erc20Master, name_));
+        hashERC20 = HashERC20(_cloneAsMinimalProxy(erc20Master, name_));
         
         HashERC20.init(
             name_,
@@ -47,7 +47,7 @@ contract HashERC20factory is Multicall {
             owner_
         );
 
-        emit ERC20deployed(HashERC20, name_, symbol_, details_, accounts_, amounts_, paused_, owner_);
+        emit ERC20deployed(hashERC20, name_, symbol_, details_, accounts_, amounts_, paused_, owner_);
     }
 
     /// @dev modified from Aelin (https://github.com/AelinXYZ/aelin/blob/main/contracts/MinimalProxyFactory.sol)

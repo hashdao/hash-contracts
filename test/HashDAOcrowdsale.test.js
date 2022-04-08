@@ -32,8 +32,8 @@ describe("Crowdsale", function () {
       ;[proposer, alice, bob] = await ethers.getSigners()
   
       Hash = await ethers.getContractFactory("HashDAO")
-      Hash = await Hash.deploy()
-      await Hash.deployed()
+      hash = await Hash.deploy()
+      await hash.deployed()
 
       PurchaseToken = await ethers.getContractFactory("HashERC20")
       purchaseToken = await PurchaseToken.deploy()
@@ -59,7 +59,7 @@ describe("Crowdsale", function () {
   
     it("Should allow unrestricted ETH crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -85,28 +85,28 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
+        await hash.processProposal(1)
         await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         await crowdsale 
             .connect(alice)
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
-        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
     })
 
     it("Should allow restricted ETH crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -138,28 +138,28 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
+        await hash.processProposal(1)
         await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         await crowdsale 
             .connect(alice)
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
-        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
     })
 
     it("Should forbid non-whitelisted participation in ETH crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -191,28 +191,28 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
+        await hash.processProposal(1)
         await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         expect(await crowdsale 
             .connect(alice)
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         }).should.be.reverted)
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
-        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(0))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(0))
     })
 
     it("Should enforce purchase limit in ETH crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -244,30 +244,30 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
+        await hash.processProposal(1)
         await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         })
         expect(await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         }).should.be.reverted)
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(210))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(210))
     })
 
     it("Should allow unrestricted ERC20 crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -295,22 +295,22 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await crowdsale.callExtension(Hash.address, getBigNumber(50))
+        await hash.processProposal(1)
+        await crowdsale.callExtension(hash.address, getBigNumber(50))
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(950)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
     })
 
     it("Should allow restricted ERC20 crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -344,22 +344,22 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await crowdsale.callExtension(Hash.address, getBigNumber(50))
+        await hash.processProposal(1)
+        await crowdsale.callExtension(hash.address, getBigNumber(50))
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(950)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(110))
     })
 
     it("Should forbid non-whitelisted participation in ERC20 crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -393,22 +393,22 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        expect(await crowdsale.callExtension(Hash.address, getBigNumber(50)).should.be.reverted)
+        await hash.processProposal(1)
+        expect(await crowdsale.callExtension(hash.address, getBigNumber(50)).should.be.reverted)
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(1000)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(10))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(10))
     })
 
     it("Should enforce purchase limit in ERC20 crowdsale", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -442,24 +442,24 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await crowdsale.callExtension(Hash.address, getBigNumber(50))
-        await crowdsale.callExtension(Hash.address, getBigNumber(50))
-        expect(await crowdsale.callExtension(Hash.address, getBigNumber(50)).should.be.reverted)
+        await hash.processProposal(1)
+        await crowdsale.callExtension(hash.address, getBigNumber(50))
+        await crowdsale.callExtension(hash.address, getBigNumber(50))
+        expect(await crowdsale.callExtension(hash.address, getBigNumber(50)).should.be.reverted)
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(900)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(100)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(210))
+        expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(210))
     })
 
     it("Should enforce purchase time limit", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -485,15 +485,15 @@ describe("Crowdsale", function () {
         )
 
         await Hash.propose(9, "TEST", [crowdsale.address], [1], [payload])
-        await Hash.vote(1, true)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
+        await hash.processProposal(1)
         await advanceTime(1672174799)
         expect(await crowdsale 
-            .callExtension(Hash.address, getBigNumber(50), {
+            .callExtension(hash.address, getBigNumber(50), {
                 value: getBigNumber(50),
         }).should.be.reverted)
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(0)
         )
     })

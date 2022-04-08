@@ -26,16 +26,16 @@ describe("HashDAO", function () {
     ;[proposer, alice, bob] = await ethers.getSigners()
 
     Hash = await ethers.getContractFactory("HashDAO")
-    Hash = await Hash.deploy()
-    await Hash.deployed()
-    // console.log(Hash.address)
+    hash = await Hash.deploy()
+    await hash.deployed()
+    // console.log(hash.address)
     // console.log("alice eth balance", await alice.getBalance())
     // console.log("bob eth balance", await bob.getBalance())
     
   })
 
   it("Should initialize with correct params", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -50,7 +50,7 @@ describe("HashDAO", function () {
     expect(await Hash.symbol()).to.equal("Hash")
     expect(await Hash.docs()).to.equal("DOCS")
     expect(await Hash.paused()).to.equal(false)
-    expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(10))
+    expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(10))
     expect(await Hash.votingPeriod()).to.equal(30)
     expect(await Hash.gracePeriod()).to.equal(0)
     expect(await Hash.quorum()).to.equal(0)
@@ -69,7 +69,7 @@ describe("HashDAO", function () {
     expect(await Hash.proposalVoteTypes(11)).to.equal(1)
   })
   it("Should revert if initialization gov settings exceed bounds", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -80,7 +80,7 @@ describe("HashDAO", function () {
       [getBigNumber(10)],
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0, 1, 1]
     ).should.be.reverted)
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -93,7 +93,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if initialization arrays don't match", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -104,7 +104,7 @@ describe("HashDAO", function () {
       [getBigNumber(10)],
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ).should.be.reverted)
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -117,7 +117,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if already initialized", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -128,7 +128,7 @@ describe("HashDAO", function () {
       [getBigNumber(10)],
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ))
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -141,7 +141,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if voting period is initialized null or longer than year", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -152,7 +152,7 @@ describe("HashDAO", function () {
       [getBigNumber(10)],
       [0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ).should.be.reverted)
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -165,7 +165,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if grace period is initialized longer than year", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -178,7 +178,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if quorum is initialized greater than 100", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -191,7 +191,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if supermajority is initialized less than 52 or greater than 100", async function () {
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -202,7 +202,7 @@ describe("HashDAO", function () {
       [getBigNumber(10)],
       [30, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ).should.be.reverted)
-    expect(await Hash.init(
+    expect(await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -215,7 +215,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if proposal arrays don't match", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -235,7 +235,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if period proposal is for null or longer than year", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -270,7 +270,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if grace proposal is for longer than year", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -298,7 +298,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if quorum proposal is for greater than 100", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -326,7 +326,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if supermajority proposal is for less than 52 or greater than 100", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -361,7 +361,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should revert if type proposal has proposal type greater than 10, vote type greater than 3, or setting length isn't 2", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -403,7 +403,7 @@ describe("HashDAO", function () {
     ).should.be.reverted)
   })
   it("Should allow proposer to cancel unsponsored proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -424,7 +424,7 @@ describe("HashDAO", function () {
     await Hash.connect(alice).cancelProposal(1)
   })
   it("Should forbid non-proposer from cancelling unsponsored proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -445,7 +445,7 @@ describe("HashDAO", function () {
     expect(await Hash.cancelProposal(0).should.be.reverted)
   })
   it("Should forbid proposer from cancelling sponsored proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -463,11 +463,11 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.sponsorProposal(1)
+    await hash.sponsorProposal(1)
     expect(await Hash.connect(alice).cancelProposal(1).should.be.reverted)
   })
   it("Should forbid cancelling non-existent proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -488,7 +488,7 @@ describe("HashDAO", function () {
     expect(await Hash.connect(alice).cancelProposal(10).should.be.reverted)
   })
   it("Should allow sponsoring proposal and processing", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -506,14 +506,14 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.sponsorProposal(1)
-    await Hash.vote(1, true)
+    await hash.sponsorProposal(1)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
-    expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(1000))
+    await hash.processProposal(1)
+    expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(1000))
   })
   it("Should forbid non-member from sponsoring proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -534,7 +534,7 @@ describe("HashDAO", function () {
     expect(await Hash.connect(alice).sponsorProposal(0).should.be.reverted)
   })
   it("Should forbid sponsoring non-existent or processed proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -552,16 +552,16 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.sponsorProposal(1)
-    await Hash.vote(1, true)
+    await hash.sponsorProposal(1)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
-    expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(1000))
-    expect(await Hash.sponsorProposal(1).should.be.reverted)
-    expect(await Hash.sponsorProposal(100).should.be.reverted)
+    await hash.processProposal(1)
+    expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(1000))
+    expect(await hash.sponsorProposal(1).should.be.reverted)
+    expect(await hash.sponsorProposal(100).should.be.reverted)
   })
   it("Should forbid sponsoring an already sponsored proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -579,11 +579,11 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.sponsorProposal(1)
-    expect(await Hash.sponsorProposal(1).should.be.reverted)
+    await hash.sponsorProposal(1)
+    expect(await hash.sponsorProposal(1).should.be.reverted)
   })
   it("Should allow self-sponsorship by a member", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -601,10 +601,10 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
   })
   it("Should forbid a member from voting again on proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -622,11 +622,11 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
-    expect(await Hash.vote(1, true).should.be.reverted)
+    await hash.vote(1, true)
+    expect(await hash.vote(1, true).should.be.reverted)
   })
   it("Should forbid voting after period ends", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -645,10 +645,10 @@ describe("HashDAO", function () {
       [0x00]
     )
     await advanceTime(35)
-    expect(await Hash.vote(1, true).should.be.reverted)
+    expect(await hash.vote(1, true).should.be.reverted)
   })
   it("Should forbid processing before voting period ends", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -666,12 +666,12 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(29)
-    expect(await Hash.processProposal(1).should.be.reverted)
+    expect(await hash.processProposal(1).should.be.reverted)
   })
   it("Should forbid processing before grace period ends", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -690,11 +690,11 @@ describe("HashDAO", function () {
       [0x00]
     )
     await advanceTime(29)
-    await Hash.vote(1, true)
-    expect(await Hash.processProposal(1).should.be.reverted)
+    await hash.vote(1, true)
+    expect(await hash.processProposal(1).should.be.reverted)
   })
   it("Should process membership proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -712,13 +712,13 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
-    expect(await Hash.balanceOf(proposer.address)).to.equal(getBigNumber(1001))
+    await hash.processProposal(1)
+    expect(await hash.balanceOf(proposer.address)).to.equal(getBigNumber(1001))
   })
   it("voteBySig should revert if the signature is invalid", async () => {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -732,7 +732,7 @@ describe("HashDAO", function () {
     await Hash.propose(0, "TEST", [alice.address], [0], [0x00])
     const rs = ethers.utils.formatBytes32String("rs")
     expect(
-      Hash.voteBySig(proposer.address, 0, true, 0, rs, rs).should.be.reverted
+      hash.voteBySig(proposer.address, 0, true, 0, rs, rs).should.be.reverted
     )
   })
   it("Should process membership proposal via voteBySig", async () => {
@@ -740,7 +740,7 @@ describe("HashDAO", function () {
       name: "Hash",
       version: "1",
       chainId: 31337,
-      verifyingContract: Hash.address,
+      verifyingContract: hash.address,
     }
     const types = {
       SignVote: [
@@ -755,7 +755,7 @@ describe("HashDAO", function () {
       approve: true,
     }
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -771,13 +771,13 @@ describe("HashDAO", function () {
     const signature = await proposer._signTypedData(domain, types, value)
     const { r, s, v } = ethers.utils.splitSignature(signature)
 
-    await Hash.voteBySig(proposer.address, 1, true, v, r, s)
+    await hash.voteBySig(proposer.address, 1, true, v, r, s)
     await advanceTime(35)
-    await Hash.processProposal(1)
-    expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(1000))
+    await hash.processProposal(1)
+    expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(1000))
   })
   it("Should process burn (eviction) proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -789,10 +789,10 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(1, "TEST", [proposer.address], [getBigNumber(1)], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
-    expect(await Hash.balanceOf(proposer.address)).to.equal(0)
+    await hash.processProposal(1)
+    expect(await hash.balanceOf(proposer.address)).to.equal(0)
   })
   it("Should process contract call proposal - Single", async function () {
     let HashERC20 = await ethers.getContractFactory("HashERC20")
@@ -802,16 +802,16 @@ describe("HashDAO", function () {
       "Hash",
       "Hash",
       "DOCS",
-      [Hash.address],
+      [hash.address],
       [getBigNumber(100)],
       false,
-      Hash.address
+      hash.address
     )
     let payload = HashERC20.interface.encodeFunctionData("transfer", [
       alice.address,
       getBigNumber(15)
     ])
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -823,16 +823,16 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(2, "TEST", [HashERC20.address], [0], [payload])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await HashERC20.totalSupply()).to.equal(getBigNumber(100))
     expect(await HashERC20.balanceOf(alice.address)).to.equal(getBigNumber(15))
   })
   it("Should process contract call proposal - Multiple", async function () {
     // Send Eth to Hash
     proposer.sendTransaction({
-      to: Hash.address,
+      to: hash.address,
       value: getBigNumber(10),
     })
     // Instantiate 1st contract
@@ -843,10 +843,10 @@ describe("HashDAO", function () {
       "Hash",
       "Hash",
       "DOCS",
-      [Hash.address],
+      [hash.address],
       [getBigNumber(100)],
       false,
-      Hash.address
+      hash.address
     )
     let payload = HashERC20.interface.encodeFunctionData("transfer", [
       alice.address,
@@ -860,7 +860,7 @@ describe("HashDAO", function () {
       [alice.address, bob.address],
       "hello",
     ])
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -878,16 +878,16 @@ describe("HashDAO", function () {
       [0, getBigNumber(4)],
       [payload, payload2]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await HashERC20.totalSupply()).to.equal(getBigNumber(100))
     expect(await HashERC20.balanceOf(alice.address)).to.equal(getBigNumber(15))
     expect(await dropETH.amount()).to.equal(getBigNumber(2))
     expect(await dropETH.recipients(1)).to.equal(bob.address)
   })
   it("Should process voting period proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -900,13 +900,13 @@ describe("HashDAO", function () {
     )
     expect(await Hash.votingPeriod()).to.equal(30)
     await Hash.propose(3, "TEST", [proposer.address], [90], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.votingPeriod()).to.equal(90)
   })
   it("Should process grace period proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -919,13 +919,13 @@ describe("HashDAO", function () {
     )
     expect(await Hash.gracePeriod()).to.equal(30)
     await Hash.propose(4, "TEST", [proposer.address], [60], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(125)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.gracePeriod()).to.equal(60)
   })
   it("Should process quorum proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -937,13 +937,13 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(5, "TEST", [proposer.address], [100], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.quorum()).to.equal(100)
   })
   it("Should process supermajority proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -955,13 +955,13 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(6, "TEST", [proposer.address], [52], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.supermajority()).to.equal(52)
   })
   it("Should process type proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -979,13 +979,13 @@ describe("HashDAO", function () {
       [0, 3],
       [0x00, 0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.proposalVoteTypes(0)).to.equal(3)
   })
   it("Should process pause proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -997,13 +997,13 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(8, "TEST", [proposer.address], [0], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.paused()).to.equal(false)
   })
   it("Should process extension proposal - General", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1015,13 +1015,13 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(9, "TEST", [wethAddress], [0], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.extensions(wethAddress)).to.equal(false)
   })
   it("Should toggle extension proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1033,14 +1033,14 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(9, "TEST", [wethAddress], [1], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.extensions(wethAddress)).to.equal(true)
   })
   it("Should process extension proposal - HashDAOcrowdsale with ETH", async function () {
     // Instantiate HashDAO
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1082,18 +1082,18 @@ describe("HashDAO", function () {
       ]
     )
     await Hash.propose(9, "TEST", [HashDAOcrowdsale.address], [1], [payload])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     await HashDAOcrowdsale 
       .connect(alice)
-      .callExtension(Hash.address, getBigNumber(50), {
+      .callExtension(hash.address, getBigNumber(50), {
         value: getBigNumber(50),
       })
-    expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+    expect(await ethers.provider.getBalance(hash.address)).to.equal(
       getBigNumber(50)
     )
-    expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
+    expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
   })
   it("Should process extension proposal - HashDAOcrowdsale with ERC20", async function () {
     // Instantiate purchaseToken
@@ -1111,7 +1111,7 @@ describe("HashDAO", function () {
     )
     await purchaseToken.deployed()
     // Instantiate HashDAO
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1146,22 +1146,22 @@ describe("HashDAO", function () {
       [1, purchaseToken.address, 2, getBigNumber(100), 1672174799, "DOCS"]
     )
     await Hash.propose(9, "TEST", [HashDAOcrowdsale.address], [1], [payload])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     await purchaseToken
       .connect(alice)
       .approve(HashDAOcrowdsale.address, getBigNumber(50))
     await HashDAOcrowdsale
       .connect(alice)
-      .callExtension(Hash.address, getBigNumber(50))
-    expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+      .callExtension(hash.address, getBigNumber(50))
+    expect(await purchaseToken.balanceOf(hash.address)).to.equal(
       getBigNumber(50)
     )
-    expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
+    expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(100))
   })
   it("Should process escape proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1179,7 +1179,7 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await Hash.propose(
       0,
       "TEST",
@@ -1187,18 +1187,18 @@ describe("HashDAO", function () {
       [getBigNumber(99)],
       [0x00]
     )
-    await Hash.vote(2, false)
+    await hash.vote(2, false)
     await Hash.propose(10, "TEST", [proposer.address], [2], [0x00])
-    await Hash.vote(3, true)
+    await hash.vote(3, true)
     await advanceTime(35)
-    await Hash.processProposal(3)
+    await hash.processProposal(3)
     // Proposal #1 remains intact
     // console.log(await Hash.proposals(0))
     // Proposal #2 deleted
     // console.log(await Hash.proposals(1))
   })
   it("Should process docs proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1210,13 +1210,13 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.propose(11, "TEST", [], [], [])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.docs()).to.equal("TEST")
   })
   it("Should forbid processing a non-existent proposal", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1227,10 +1227,10 @@ describe("HashDAO", function () {
       [getBigNumber(1)],
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
-    expect(await Hash.processProposal(2).should.be.reverted)
+    expect(await hash.processProposal(2).should.be.reverted)
   })
   it("Should forbid processing a proposal that was already processed", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1248,13 +1248,13 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
-    expect(await Hash.processProposal(1).should.be.reverted)
+    await hash.processProposal(1)
+    expect(await hash.processProposal(1).should.be.reverted)
   })
   it("Should forbid processing a proposal before voting period ends", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1272,12 +1272,12 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(20)
-    expect(await Hash.processProposal(1).should.be.reverted)
+    expect(await hash.processProposal(1).should.be.reverted)
   })
   it("Should forbid processing a proposal before previous processes", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1296,9 +1296,9 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     // check case
     await Hash.propose(
       0,
@@ -1307,7 +1307,7 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(2, true)
+    await hash.vote(2, true)
     await Hash.propose(
       0,
       "TEST",
@@ -1315,14 +1315,14 @@ describe("HashDAO", function () {
       [getBigNumber(1000)],
       [0x00]
     )
-    await Hash.vote(3, true)
+    await hash.vote(3, true)
     await advanceTime(35)
-    expect(await Hash.processProposal(3).should.be.reverted)
-    await Hash.processProposal(2)
-    await Hash.processProposal(3)
+    expect(await hash.processProposal(3).should.be.reverted)
+    await hash.processProposal(2)
+    await hash.processProposal(3)
   })
   it("Should forbid calling a non-whitelisted extension", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1336,7 +1336,7 @@ describe("HashDAO", function () {
     expect(await Hash.callExtension(wethAddress, 10, 0x0).should.be.reverted)
   })
   it("Should forbid non-whitelisted extension calling DAO", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1353,7 +1353,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1365,16 +1365,16 @@ describe("HashDAO", function () {
       [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     )
     await Hash.transfer(receiver.address, getBigNumber(4))
-    expect(await Hash.balanceOf(sender.address)).to.equal(getBigNumber(6))
-    expect(await Hash.balanceOf(receiver.address)).to.equal(getBigNumber(4))
-    // console.log(await Hash.balanceOf(sender.address))
-    // console.log(await Hash.balanceOf(receiver.address))
+    expect(await hash.balanceOf(sender.address)).to.equal(getBigNumber(6))
+    expect(await hash.balanceOf(receiver.address)).to.equal(getBigNumber(4))
+    // console.log(await hash.balanceOf(sender.address))
+    // console.log(await hash.balanceOf(receiver.address))
   })
   it("Should not allow a member to transfer excess shares", async function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1393,7 +1393,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1412,7 +1412,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1429,7 +1429,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1448,7 +1448,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1467,7 +1467,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1487,7 +1487,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1505,7 +1505,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1524,7 +1524,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1543,7 +1543,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1559,7 +1559,7 @@ describe("HashDAO", function () {
     expect(await Hash.connect(receiver).transferFrom(sender.address, receiver.address, getBigNumber(4)).should.be.reverted)
   })
   it("Should not allow vote tally after current timestamp", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1575,7 +1575,7 @@ describe("HashDAO", function () {
     )
   })
   it("Should list member as 'delegate' if no delegation to others", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1589,7 +1589,7 @@ describe("HashDAO", function () {
     expect(await Hash.delegates(bob.address)).to.equal(bob.address)
   })
   it("Should match current votes to undelegated balance", async function () {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1606,7 +1606,7 @@ describe("HashDAO", function () {
     let sender, receiver
     ;[sender, receiver] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1621,8 +1621,8 @@ describe("HashDAO", function () {
     expect(await Hash.delegates(sender.address)).to.equal(receiver.address)
     expect(await Hash.getCurrentVotes(sender.address)).to.equal(0)
     expect(await Hash.getCurrentVotes(receiver.address)).to.equal(getBigNumber(10))
-    expect(await Hash.balanceOf(sender.address)).to.equal(getBigNumber(10))
-    expect(await Hash.balanceOf(receiver.address)).to.equal(0)
+    expect(await hash.balanceOf(sender.address)).to.equal(getBigNumber(10))
+    expect(await hash.balanceOf(receiver.address)).to.equal(0)
     await Hash.delegate(sender.address)
     expect(await Hash.delegates(sender.address)).to.equal(sender.address)
     expect(await Hash.getCurrentVotes(sender.address)).to.equal(getBigNumber(10))
@@ -1632,7 +1632,7 @@ describe("HashDAO", function () {
     let sender, receiver, receiver2
     ;[sender, receiver, receiver2] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1657,7 +1657,7 @@ describe("HashDAO", function () {
     let sender, receiver, receiver2
     ;[sender, receiver, receiver2] = await ethers.getSigners()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1680,7 +1680,7 @@ describe("HashDAO", function () {
     expect(await Hash.getCurrentVotes(sender.address)).to.equal(getBigNumber(5))
   })
   it("Should allow permit if the signature is valid", async () => {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1695,7 +1695,7 @@ describe("HashDAO", function () {
       name: "Hash",
       version: "1",
       chainId: 31337,
-      verifyingContract: Hash.address,
+      verifyingContract: hash.address,
     }
     const types = {
       Permit: [
@@ -1721,32 +1721,32 @@ describe("HashDAO", function () {
 
     // Unpause to unblock transferFrom
     await Hash.propose(8, "TEST", [proposer.address], [0], [0x00])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.paused()).to.equal(false)
 
     // console.log(
     //   "Proposer's balance before delegation: ",
-    //   await Hash.balanceOf(proposer.address)
+    //   await hash.balanceOf(proposer.address)
     // )
     // console.log(
     //   "Bob's balance before delegation: ",
-    //   await Hash.balanceOf(bob.address)
+    //   await hash.balanceOf(bob.address)
     // )
     await Hash.connect(bob).transferFrom(proposer.address, bob.address, getBigNumber(1))
     // console.log(
     //   "Proposer's balance after delegation: ",
-    //   await Hash.balanceOf(proposer.address)
+    //   await hash.balanceOf(proposer.address)
     // )
     // console.log(
     //   "Bob's balance after delegation: ",
-    //   await Hash.balanceOf(bob.address)
+    //   await hash.balanceOf(bob.address)
     // )
-    expect(await Hash.balanceOf(bob.address)).to.equal(getBigNumber(1))
+    expect(await hash.balanceOf(bob.address)).to.equal(getBigNumber(1))
   })
   it("Should revert permit if the signature is invalid", async () => {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1763,7 +1763,7 @@ describe("HashDAO", function () {
     )
   })
   it("Should allow delegateBySig if the signature is valid", async () => {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1778,7 +1778,7 @@ describe("HashDAO", function () {
       name: "Hash",
       version: "1",
       chainId: 31337,
-      verifyingContract: Hash.address,
+      verifyingContract: hash.address,
     }
     const types = {
       Delegation: [
@@ -1799,7 +1799,7 @@ describe("HashDAO", function () {
     Hash.delegateBySig(bob.address, 0, 1941525801, v, r, s)
   })
   it("Should revert delegateBySig if the signature is invalid", async () => {
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1823,7 +1823,7 @@ describe("HashDAO", function () {
     reentrant = await Reentrant.deploy()
     await reentrant.deployed()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",
@@ -1836,9 +1836,9 @@ describe("HashDAO", function () {
     )
     
     await Hash.propose(9, "TEST", [reentrant.address], [1], [0x0])
-    await Hash.vote(1, true)
+    await hash.vote(1, true)
     await advanceTime(35)
-    await Hash.processProposal(1)
+    await hash.processProposal(1)
     expect(await Hash.extensions(reentrant.address)).to.equal(true)
     
     expect(await Hash.callExtension(reentrant.address, 0, "").should.be.reverted)
@@ -1851,7 +1851,7 @@ describe("HashDAO", function () {
     callMock = await CallMock.deploy()
     await callMock.deployed()
 
-    await Hash.init(
+    await hash.init(
       "Hash",
       "Hash",
       "DOCS",

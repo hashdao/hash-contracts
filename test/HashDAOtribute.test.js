@@ -26,9 +26,9 @@ describe("Tribute", function () {
       ;[proposer, alice, bob] = await ethers.getSigners()
   
       Hash = await ethers.getContractFactory("HashDAO")
-      Hash = await Hash.deploy()
-      await Hash.deployed()
-      // console.log(Hash.address)
+      hash = await Hash.deploy()
+      await hash.deployed()
+      // console.log(hash.address)
       // console.log("alice eth balance", await alice.getBalance())
       // console.log("bob eth balance", await bob.getBalance())
       Tribute = await ethers.getContractFactory("HashDAOtribute")
@@ -38,7 +38,7 @@ describe("Tribute", function () {
 
     it("Should process tribute proposal directly", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -51,7 +51,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -66,32 +66,32 @@ describe("Tribute", function () {
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(0)
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, true)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await tribute.releaseTributeProposalAndProcess(Hash.address, 1)
+        await tribute.releaseTributeProposalAndProcess(hash.address, 1)
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(1010)
         )
     })
   
     it("Should process ETH tribute proposal", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -104,7 +104,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -119,26 +119,26 @@ describe("Tribute", function () {
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(0)
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, true)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(1010)
         )
     })
@@ -159,7 +159,7 @@ describe("Tribute", function () {
         )
 
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -174,7 +174,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, getBigNumber(50))
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -191,29 +191,29 @@ describe("Tribute", function () {
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(0)
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, true)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(950)
         )
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(1010)
         )
     })
@@ -229,7 +229,7 @@ describe("Tribute", function () {
         await purchaseToken.mint(proposer.address, 1, "DOCS")
 
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -244,7 +244,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, 1)
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -264,39 +264,39 @@ describe("Tribute", function () {
         expect(await purchaseToken.ownerOf(1)).to.equal(
             tribute.address
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             0
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, true)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, true)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             0
         )
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             0
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             1
         )
         expect(await purchaseToken.ownerOf(1)).to.equal(
-            Hash.address
+            hash.address
         )
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(1010)
         )
     })
 
     it("Should allow ETH tribute proposal cancellation", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -309,7 +309,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -325,16 +325,16 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await tribute.cancelTributeProposal(Hash.address, 1)
+        await tribute.cancelTributeProposal(hash.address, 1)
 
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             0
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             0
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
     })
@@ -354,7 +354,7 @@ describe("Tribute", function () {
             proposer.address
         )
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -369,7 +369,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, getBigNumber(50))
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -386,15 +386,15 @@ describe("Tribute", function () {
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(0)
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
 
-        await tribute.cancelTributeProposal(Hash.address, 1)
+        await tribute.cancelTributeProposal(hash.address, 1)
 
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(1000)
@@ -402,11 +402,11 @@ describe("Tribute", function () {
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(0)
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
     })
@@ -422,7 +422,7 @@ describe("Tribute", function () {
         await purchaseToken.mint(proposer.address, 1, "DOCS")
 
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -437,7 +437,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, 1)
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -457,15 +457,15 @@ describe("Tribute", function () {
         expect(await purchaseToken.ownerOf(1)).to.equal(
             tribute.address
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             0
         )
 
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
 
-        await tribute.cancelTributeProposal(Hash.address, 1)
+        await tribute.cancelTributeProposal(hash.address, 1)
 
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             1
@@ -476,18 +476,18 @@ describe("Tribute", function () {
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             0
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             0
         )
    
-        expect(await Hash.balanceOf(proposer.address)).to.equal(
+        expect(await hash.balanceOf(proposer.address)).to.equal(
             getBigNumber(10)
         )
     })
 
     it("Should prevent cancellation by non-proposer of tribute proposal", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -500,7 +500,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -516,12 +516,12 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
         
-        expect(await tribute.connect(alice).cancelTributeProposal(Hash.address, 1).should.be.reverted)
+        expect(await tribute.connect(alice).cancelTributeProposal(hash.address, 1).should.be.reverted)
     })
 
     it("Should prevent cancellation of sponsored ETH tribute proposal", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -534,7 +534,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -550,9 +550,9 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await Hash.sponsorProposal(1)
+        await hash.sponsorProposal(1)
         
-        expect(await tribute.cancelTributeProposal(Hash.address, 1).should.be.reverted)
+        expect(await tribute.cancelTributeProposal(hash.address, 1).should.be.reverted)
     })
 
     it("Should prevent cancellation of sponsored ERC20 tribute proposal", async function () {
@@ -570,7 +570,7 @@ describe("Tribute", function () {
             proposer.address
         )
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -585,7 +585,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, getBigNumber(50))
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -603,9 +603,9 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await Hash.sponsorProposal(1)
+        await hash.sponsorProposal(1)
         
-        expect(await tribute.cancelTributeProposal(Hash.address, 1).should.be.reverted)
+        expect(await tribute.cancelTributeProposal(hash.address, 1).should.be.reverted)
 
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             getBigNumber(950)
@@ -613,7 +613,7 @@ describe("Tribute", function () {
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(0)
         )
     })
@@ -629,7 +629,7 @@ describe("Tribute", function () {
         await purchaseToken.mint(proposer.address, 1, "DOCS")
 
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -644,7 +644,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, 1)
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -665,9 +665,9 @@ describe("Tribute", function () {
             tribute.address
         )
 
-        await Hash.sponsorProposal(1)
+        await hash.sponsorProposal(1)
         
-        expect(await tribute.cancelTributeProposal(Hash.address, 1).should.be.reverted)
+        expect(await tribute.cancelTributeProposal(hash.address, 1).should.be.reverted)
 
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
             0
@@ -678,14 +678,14 @@ describe("Tribute", function () {
         expect(await purchaseToken.ownerOf(1)).to.equal(
             tribute.address
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             0
         )
     })
 
     it("Should return ETH tribute to proposer if proposal unsuccessful", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -698,7 +698,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -714,15 +714,15 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, false)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, false)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(0)
         )
     })
@@ -742,7 +742,7 @@ describe("Tribute", function () {
             proposer.address
         )
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -757,7 +757,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, getBigNumber(50))
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -775,15 +775,15 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, false)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, false)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             getBigNumber(0)
         )
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
@@ -802,7 +802,7 @@ describe("Tribute", function () {
         await purchaseToken.mint(proposer.address, 1, "DOCS")
 
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -817,7 +817,7 @@ describe("Tribute", function () {
         await purchaseToken.approve(tribute.address, 1)
 
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -838,15 +838,15 @@ describe("Tribute", function () {
             tribute.address
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, false)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, false)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await purchaseToken.balanceOf(tribute.address)).to.equal(
             0
         )
-        expect(await purchaseToken.balanceOf(Hash.address)).to.equal(
+        expect(await purchaseToken.balanceOf(hash.address)).to.equal(
             0
         )
         expect(await purchaseToken.balanceOf(proposer.address)).to.equal(
@@ -859,7 +859,7 @@ describe("Tribute", function () {
 
     it("Should prevent tribute return to proposer if proposal not processed", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -872,7 +872,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -888,22 +888,22 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, true)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, true)
         await advanceTime(35)
-        expect(await tribute.releaseTributeProposal(Hash.address, 1).should.be.reverted)
-        expect(await tribute.releaseTributeProposal(Hash.address, 2).should.be.reverted)
+        expect(await tribute.releaseTributeProposal(hash.address, 1).should.be.reverted)
+        expect(await tribute.releaseTributeProposal(hash.address, 2).should.be.reverted)
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(50)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(0)
         )
     })
 
     it("Should prevent release call if already completed", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -916,7 +916,7 @@ describe("Tribute", function () {
         )
         // Instantiate Tribute
         await tribute.submitTributeProposal(
-            Hash.address,
+            hash.address,
             0,
             "TRIBUTE",
             [proposer.address],
@@ -932,17 +932,17 @@ describe("Tribute", function () {
             getBigNumber(50)
         )
 
-        await Hash.sponsorProposal(1)
-        await Hash.vote(1, false)
+        await hash.sponsorProposal(1)
+        await hash.vote(1, false)
         await advanceTime(35)
-        await Hash.processProposal(1)
-        await tribute.releaseTributeProposal(Hash.address, 1)
+        await hash.processProposal(1)
+        await tribute.releaseTributeProposal(hash.address, 1)
         expect(await ethers.provider.getBalance(tribute.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await ethers.provider.getBalance(Hash.address)).to.equal(
+        expect(await ethers.provider.getBalance(hash.address)).to.equal(
             getBigNumber(0)
         )
-        expect(await tribute.releaseTributeProposal(Hash.address, 1).should.be.reverted)
+        expect(await tribute.releaseTributeProposal(hash.address, 1).should.be.reverted)
     })
 })

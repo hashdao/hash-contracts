@@ -20,13 +20,13 @@ describe("Deployer", function () {
       ;[alice, bob, carol] = await ethers.getSigners()
   
       Hash = await ethers.getContractFactory("HashDAO")
-      Hash = await Hash.deploy()
-      await Hash.deployed()
+      hash = await Hash.deploy()
+      await hash.deployed()
     })
   
     it("Should deploy Hash DAO", async function () {
         // Instantiate HashDAO
-        await Hash.init(
+        await hash.init(
           "Hash",
           "Hash",
           "DOCS",
@@ -38,6 +38,6 @@ describe("Deployer", function () {
           [30, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         )
 
-        expect(await Hash.balanceOf(alice.address)).to.equal(getBigNumber(10))
+        expect(await hash.balanceOf(alice.address)).to.equal(getBigNumber(10))
     })
   })
