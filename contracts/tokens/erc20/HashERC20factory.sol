@@ -8,7 +8,7 @@ import '../../utils/Multicall.sol';
 /// @notice Factory to deploy Hash ERC20.
 contract HashERC20factory is Multicall {
     event ERC20deployed(
-        IHashDAOtribute 
+        HashERC20 indexed hashERC20, 
         string name, 
         string symbol, 
         string details, 
@@ -34,10 +34,10 @@ contract HashERC20factory is Multicall {
         uint256[] calldata amounts_,
         bool paused_,
         address owner_
-    ) public virtual returns (HashERC20 HashERC20) {
+    ) public virtual returns (HashERC20 hashERC20) {
         hashERC20 = HashERC20(_cloneAsMinimalProxy(erc20Master, name_));
         
-        HashERC20.init(
+        hashERC20.init(
             name_,
             symbol_,
             details_,
