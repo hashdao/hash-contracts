@@ -1,15 +1,14 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-
+// SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity >=0.8.4;
 
 import './HashDAOtoken.sol';
 import './utils/Multicall.sol';
-import './utils/NFThelper.sol';
+import './utils/NFTreceiver.sol';
 import './utils/ReentrancyGuard.sol';
 import './interfaces/IHashDAOextension.sol';
 
 /// @notice Simple gas-optimized Hash DAO core module.
-contract HashDAO is HashDAOtoken, Multicall, NFThelper, ReentrancyGuard {
+contract HashDAO is HashDAOtoken, Multicall, NFTreceiver, ReentrancyGuard {
     /*///////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/
